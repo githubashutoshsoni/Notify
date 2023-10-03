@@ -68,9 +68,12 @@ import com.aritra.notify.components.dialog.TextDialog
 import com.aritra.notify.components.topbar.AddEditTopBar
 import com.aritra.notify.domain.models.Note
 import com.aritra.notify.utils.Const
+import com.aritra.notify.utils.RichTextStyleRow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.BasicRichTextEditor
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -110,6 +113,7 @@ fun AddNotesScreen(
     SideEffect {
         permissionState.launchPermissionRequest()
     }
+    val basicRichTextState = rememberRichTextState()
 
     val speechRecognizerLauncher = rememberLauncherForActivityResult(
         contract = SpeechRecognizerContract(),
@@ -304,40 +308,69 @@ fun AddNotesScreen(
                     ),
                 )
 
-                TextField(
+                RichTextStyleRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = basicRichTextState,
+                )
+
+
+                /* TextField(
+                     modifier = Modifier.fillMaxSize(),
+                     value = description,
+                     onValueChange = { newDescription ->
+                         description = newDescription
+                         characterCount = title.length + description.length
+                     },
+                     placeholder = {
+                         Text(
+                             stringResource(R.string.notes),
+                             fontSize = 20.sp,
+                             fontWeight = FontWeight.W500,
+                             color = Color.Gray,
+                             fontFamily = FontFamily(Font(R.font.poppins_light))
+                         )
+                     },
+
+                     colors = TextFieldDefaults.colors(
+                         focusedContainerColor = MaterialTheme.colorScheme.surface,
+                         unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                         disabledContainerColor = MaterialTheme.colorScheme.surface,
+                         focusedIndicatorColor = Color.Transparent,
+                         unfocusedIndicatorColor = Color.Transparent,
+                         disabledIndicatorColor = Color.Transparent,
+                     ),
+
+
+                 )*/
+                BasicRichTextEditor(
+
+                    state = basicRichTextState,
                     modifier = Modifier.fillMaxSize(),
-                    value = description,
-                    onValueChange = { newDescription ->
-                        description = newDescription
-                        characterCount = title.length + description.length
-                    },
-                    placeholder = {
-                        Text(
-                            stringResource(R.string.notes),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.W500,
-                            color = Color.Gray,
-                            fontFamily = FontFamily(Font(R.font.poppins_light))
-                        )
-                    },
                     textStyle = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        disabledContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
                     ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         capitalization = KeyboardCapitalization.Sentences,
                         keyboardType = KeyboardType.Text,
                     ),
+
                     maxLines = Int.MAX_VALUE,
+                    decorationBox = { innerTextField ->
+                        Box(
+
+                        ) {
+
+                            if (basicRichTextState.toString().isEmpty()) {
+                                Text(
+                                    text = "placeHolder",
+                                )
+                            } else
+                                innerTextField()
+                        }
+                    }
                 )
+
 
             }
         }

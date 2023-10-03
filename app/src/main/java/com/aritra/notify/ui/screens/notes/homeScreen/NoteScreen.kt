@@ -54,7 +54,7 @@ import com.aritra.notify.components.note.NotesCard
 @Composable
 fun NoteScreen(
     onFabClicked: () -> Unit,
-    navigateToUpdateNoteScreen: (noteId: Int) -> Unit
+    navigateToUpdateNoteScreen: (noteId: Int) -> Unit,
 ) {
 
     BackPressHandler()
